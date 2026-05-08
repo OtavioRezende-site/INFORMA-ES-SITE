@@ -3,355 +3,202 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal de Briefing - Projeto Web</title>
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%238B5CF6'/><path d='M30 70 L70 30 M60 30 L70 40' stroke='white' stroke-width='8' stroke-linecap='round'/></svg>">
-    
-    <!-- Scripts -->
+    <title>Portal de Briefing Premium - Otávio</title>
+    <!-- React & Tailwind CDN -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
-
+    <script src="https://unpkg.com/framer-motion@11.0.8/dist/framer-motion.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
-        
-        body {
-            background-color: #020617;
-            color: #f1f5f9;
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            overflow: hidden;
-            height: 100vh;
-        }
-
+        body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; overflow-x: hidden; }
+        .glass-card { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 2.5rem; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .input-premium { width: 100%; background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 1.25rem; padding: 1.25rem 1.5rem; color: white; transition: all 0.3s; outline: none; font-size: 0.875rem; }
+        .input-premium:focus { border-color: #8b5cf6; box-shadow: 0 0 20px rgba(139, 92, 246, 0.1); background: rgba(139, 92, 246, 0.03); }
+        .btn-primary { background: #8b5cf6; color: white; padding: 1.25rem 2.5rem; border-radius: 1.5rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em; transition: all 0.4s; display: flex; align-items: center; justify-center; gap: 0.75rem; border: none; cursor: pointer; }
+        .btn-primary:hover { background: #7c3aed; transform: translateY(-2px); box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); color: #94a3b8; padding: 1.25rem 2rem; border-radius: 1.5rem; font-weight: 700; transition: all 0.3s; cursor: pointer; }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.08); color: white; }
+        .accent-glow { position: relative; }
+        .accent-glow::after { content: ''; position: absolute; inset: -1px; background: linear-gradient(45deg, #8b5cf6, #d946ef); border-radius: inherit; z-index: -1; opacity: 0; transition: 0.3s; }
+        .accent-glow:hover::after { opacity: 0.4; }
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.05); border-radius: 10px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.1); }
-
-        .glass-card {
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 1.5rem;
-            overflow: hidden;
-        }
-
-        .accent-glow {
-            box-shadow: 0 0 20px rgba(139, 92, 246, 0.15);
-        }
-
-        .input-premium {
-            width: 100%;
-            background: rgba(15, 23, 42, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            color: white;
-            border-radius: 0.75rem;
-            padding: 0.75rem 1rem;
-            outline: none;
-            transition: all 0.2s;
-        }
-        .input-premium:focus {
-            border-color: rgba(139, 92, 246, 0.5);
-        }
-
-        .btn-primary {
-            background: #8B5CF6;
-            color: white;
-            font-weight: 800;
-            padding: 1rem 2.5rem;
-            border-radius: 1rem;
-            transition: all 0.2s;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            font-size: 0.75rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.75rem;
-            cursor: pointer;
-        }
-        .btn-primary:hover {
-            background: #7c3aed;
-            box-shadow: 0 10px 15px -3px rgba(139, 92, 246, 0.3);
-        }
-
-        .btn-secondary {
-            padding: 1rem 2rem;
-            border-radius: 1rem;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            color: #94a3b8;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            font-size: 0.75rem;
-            transition: all 0.2s;
-            cursor: pointer;
-        }
-        .btn-secondary:hover {
-            color: white;
-            background: rgba(255, 255, 255, 0.05);
-        }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(139, 92, 246, 0.2); border-radius: 10px; }
     </style>
 </head>
 <body>
     <div id="root"></div>
 
-    <script type="text/babel">
-        const { useState, useCallback, useRef, useEffect } = React;
+    <script>
+        const { useState, useCallback, useRef, useEffect, useMemo } = React;
         const { motion, AnimatePresence } = FramerMotion;
 
-        // Simple Lucide Icon Component for Standalone
-        const Icon = ({ name, size = 18, className = "" }) => {
-            const iconRef = useRef(null);
-            useEffect(() => {
-                if (iconRef.current) {
-                    const icon = lucide.icons[name];
-                    if (icon) {
-                        const svg = lucide.createIcons({
-                            icons: { [name]: icon },
-                            attrs: {
-                                stroke: 'currentColor',
-                                'stroke-width': 2,
-                                'stroke-linecap': 'round',
-                                'stroke-linejoin': 'round',
-                                width: size,
-                                height: size,
-                                class: className
-                            }
-                        });
-                    }
-                }
-            }, [name, size, className]);
+        // --- SVGs ---
+        const IconSparkles = () => `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>`;
+        const IconCheck = () => `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`;
+        const IconPlus = () => `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>`;
+        const IconTrash = () => `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>`;
+        const IconUpload = () => `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>`;
+        const IconBriefcase = () => `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>`;
+        const IconTarget = () => `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>`;
+        const IconWhatsApp = () => `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-2.531c1.562.934 3.451 1.427 5.383 1.428h.005c5.896 0 10.693-4.797 10.696-10.696.002-2.857-1.11-5.544-3.134-7.568-2.025-2.024-4.712-3.136-7.568-3.137-5.898 0-10.694 4.797-10.697 10.696-.001 2.031.569 4.013 1.65 5.753l-1.077 3.929 4.042-1.06zm10.98-7.142c-.301-.151-1.782-.879-2.057-.979-.275-.1-.475-.151-.675.151-.2.301-.776.979-.951 1.179-.175.2-.351.225-.651.075-.3-.151-1.268-.467-2.417-1.492-.893-.796-1.496-1.78-1.671-2.079-.175-.3-.018-.463.132-.612.135-.133.301-.351.451-.525.15-.175.2-.3.3-.5.1-.2.05-.375-.025-.525-.075-.15-.675-1.625-.925-2.225-.244-.588-.491-.508-.675-.518-.175-.008-.375-.01-.575-.01-.2 0-.525.075-.8.375-.275.3-1.05 1.026-1.05 2.503 0 1.478 1.075 2.903 1.225 3.102.15.2 2.115 3.227 5.125 4.525.715.309 1.274.494 1.708.632.718.228 1.37.196 1.885.119.574-.086 1.782-.728 2.032-1.429.25-.701.25-1.301.175-1.429-.075-.128-.275-.201-.575-.351z"/></svg>`;
 
-            return <i data-lucide={name} ref={iconRef} className={className} style={{ display: 'inline-flex', width: size, height: size }}></i>;
-        };
-
-        // --- Types (Mocked for JS) ---
-        // FormData structure matches App.tsx
-
-        const validateStep = (step, data) => {
-            const missing = [];
-            if (step === 1) {
-                if (!data.businessName.trim()) missing.push('Nome da Empresa');
-                if (!data.niche.trim()) missing.push('Ramo de Atuação');
-                if (data.objectives.length === 0) missing.push('Objetivos do Site');
-                if (data.objectives.includes('Outros') && !data.otherObjective.trim()) missing.push('Descrição do Outro Objetivo');
-                if (!data.whatsapp.trim()) missing.push('WhatsApp');
-                if (!data.instagram.trim()) missing.push('Instagram');
-            } else if (step === 2) {
-                if (data.structureMode === null) missing.push('Escolha de Estrutura');
-                if (data.structureMode === 'manual' && !data.manualStructure.trim()) missing.push('Descrição da Estrutura');
-                if (data.files.length === 0) missing.push('Nenhum arquivo enviado');
-            } else if (step === 3) {
-                if (data.colorMode === null) missing.push('Definição de Cores');
-                if (data.colorMode === 'manual' && !data.manualColors.trim()) missing.push('Sugestão de Cores');
-                if (data.typographyMode === null) missing.push('Definição de Tipografia');
-                if (data.typographyMode === 'manual' && !data.manualTypography.trim()) missing.push('Sugestão de Fontes');
-            }
-            return { isValid: missing.length === 0, missingFields: missing };
+        const SvgIcon = ({ name, className = "" }) => {
+            const icons = {
+                sparkles: IconSparkles(),
+                check: IconCheck(),
+                plus: IconPlus(),
+                trash: IconTrash(),
+                upload: IconUpload(),
+                briefcase: IconBriefcase(),
+                target: IconTarget(),
+                whatsapp: IconWhatsApp()
+            };
+            return React.createElement('span', { 
+                className: `inline-flex items-center justify-center ${className}`, 
+                dangerouslySetInnerHTML: { __html: icons[name] || '' } 
+            });
         };
 
         const WarningModal = ({ fields, onClose, onConfirm }) => (
-            <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onClick={onClose} />
-                <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} className="glass-card max-w-md w-full p-8 border-amber-500/20 relative z-10">
-                    <div className="flex items-center gap-4 text-amber-500 mb-6">
-                        <Icon name="alert-circle" size={28} />
-                        <h3 className="text-xl font-black uppercase tracking-tight">Campos em Branco</h3>
-                    </div>
-                    <div className="text-slate-400 text-sm mb-6 leading-relaxed">
-                        Aviso: Você deixou as seguintes informações em branco:
-                        <div className="mt-4 p-4 bg-white/5 rounded-xl border border-white/5 font-bold text-slate-300 text-xs max-h-32 overflow-y-auto custom-scrollbar">
-                            {fields.join(', ')}
-                        </div>
-                        <p className="mt-4 italic">Tem certeza que deseja pular esta etapa?</p>
-                    </div>
-                    <div className="flex flex-col sm:flex-row gap-3">
-                        <button onClick={onClose} className="btn-primary w-full !bg-amber-500 hover:!bg-amber-600">Voltar</button>
-                        <button onClick={onConfirm} className="btn-secondary w-full">Pular</button>
-                    </div>
-                </motion.div>
-            </div>
+            React.createElement('div', { className: "fixed inset-0 z-[100] flex items-center justify-center p-6" },
+                React.createElement(motion.div, { 
+                    initial: { opacity: 0 }, animate: { opacity: 1 }, exit: { opacity: 0 },
+                    className: "absolute inset-0 bg-slate-950/80 backdrop-blur-sm", onClick: onClose 
+                }),
+                React.createElement(motion.div, {
+                    initial: { opacity: 0, scale: 0.9, y: 20 }, animate: { opacity: 1, scale: 1, y: 0 },
+                    className: "glass-card max-w-2xl w-full p-12 border-amber-500/20 relative z-10 space-y-8"
+                },
+                    React.createElement('h3', { className: "text-3xl font-black text-amber-500 uppercase tracking-tighter" }, "Campos em Branco"),
+                    React.createElement('div', { className: "text-slate-400 text-lg space-y-6" },
+                        React.createElement('p', null, "Você deixou as seguintes informações em branco:"),
+                        React.createElement('div', { className: "p-8 bg-white/5 rounded-3xl border border-white/5 font-bold text-slate-300 text-sm max-h-48 overflow-y-auto custom-scrollbar flex flex-wrap gap-2" },
+                            fields.map(f => React.createElement('span', { key: f, className: "px-4 py-2 bg-white/5 rounded-xl border border-white/5 text-[10px]" }, f))
+                        )
+                    ),
+                    React.createElement('div', { className: "flex flex-col sm:flex-row gap-4 pt-6" },
+                        React.createElement('button', { onClick: onClose, className: "btn-primary !bg-amber-500 hover:!bg-amber-600 w-full" }, "Voltar"),
+                        React.createElement('button', { onClick: onConfirm, className: "btn-secondary w-full" }, "Pular")
+                    )
+                )
+            )
         );
-
-        const Step1 = ({ formData, setFormData }) => {
-            const toggleObjective = (obj) => {
-                const next = formData.objectives.includes(obj) ? formData.objectives.filter(o => o !== obj) : [...formData.objectives, obj];
-                setFormData(prev => ({ ...prev, objectives: next }));
-            };
-            const addChannel = () => setFormData(p => ({ ...p, extraChannels: [...p.extraChannels, { id: Math.random().toString(36).substr(2, 9), type: '', value: '' }] }));
-            const updateChannel = (id, field, value) => setFormData(p => ({ ...p, extraChannels: p.extraChannels.map(c => c.id === id ? { ...c, [field]: value } : c) }));
-            const removeChannel = (id) => setFormData(p => ({ ...p, extraChannels: p.extraChannels.filter(c => c.id !== id) }));
-
-            return (
-                <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
-                    <div className="glass-card p-8 space-y-8">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <label className="block">
-                                <span className="text-xs font-bold text-slate-400 mb-3 block uppercase tracking-widest">Nome da Empresa</span>
-                                <input type="text" value={formData.businessName} onChange={e => setFormData(p => ({ ...p, businessName: e.target.value }))} className="input-premium" placeholder="Dra. Juliana Silva" />
-                            </label>
-                            <label className="block">
-                                <span className="text-xs font-bold text-slate-400 mb-3 block uppercase tracking-widest">Ramo de Atuação</span>
-                                <input type="text" value={formData.niche} onChange={e => setFormData(p => ({ ...p, niche: e.target.value }))} className="input-premium" placeholder="Odontologia Estética" />
-                            </label>
-                        </div>
-                        <div>
-                            <span className="text-xs font-bold text-slate-400 mb-4 block uppercase flex items-center gap-2"><Icon name="target" size={14} /> Objetivos</span>
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                                {['Captar Leads', 'Vender Produto', 'Vender Serviço', 'Agendar Consultoria', 'Outros'].map(obj => (
-                                    <button key={obj} onClick={() => toggleObjective(obj)} className={`px-4 py-3 rounded-xl border text-[11px] font-bold transition-all text-left flex items-center justify-between uppercase ${formData.objectives.includes(obj) ? 'bg-violet-500/20 border-violet-500/40 text-violet-400' : 'bg-white/5 border-white/5 text-slate-500'}`}>
-                                        {obj} {formData.objectives.includes(obj) && <Icon name="check-circle-2" size={14} />}
-                                    </button>
-                                ))}
-                            </div>
-                            {formData.objectives.includes('Outros') && <input type="text" value={formData.otherObjective} onChange={e => setFormData(p => ({ ...p, otherObjective: e.target.value }))} className="input-premium mt-4" placeholder="Descreva seu objetivo..." />}
-                        </div>
-                        <div className="pt-6 border-t border-white/5 space-y-6">
-                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div className="relative">
-                                    <Icon name="zap" className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600" />
-                                    <input type="text" value={formData.whatsapp} onChange={e => setFormData(p => ({ ...p, whatsapp: e.target.value }))} className="input-premium pl-12" placeholder="WhatsApp" />
-                                </div>
-                                <div className="relative">
-                                    <Icon name="instagram" className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600" />
-                                    <input type="text" value={formData.instagram} onChange={e => setFormData(p => ({ ...p, instagram: e.target.value }))} className="input-premium pl-12" placeholder="Instagram" />
-                                </div>
-                             </div>
-                        </div>
-                    </div>
-                </motion.div>
-            );
-        };
-
-        const Step2 = ({ formData, setFormData }) => {
-            const updateFileSection = (name, section) => setFormData(p => ({ ...p, files: p.files.map(f => f.name === name ? { ...f, section } : f) }));
-            const removeFile = (name) => setFormData(p => ({ ...p, files: p.files.filter(f => f.name !== name) }));
-            const handleFileChange = (e) => {
-                if (e.target.files) {
-                    const newFiles = Array.from(e.target.files).map(f => ({ name: f.name, section: '' }));
-                    setFormData(p => ({ ...p, files: [...p.files, ...newFiles] }));
-                }
-            };
-
-            return (
-                <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
-                    <div className="glass-card p-8 space-y-6">
-                        <span className="text-xs font-bold text-slate-400 block uppercase flex items-center gap-2"><Icon name="layout" size={14} /> Estrutura</span>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {['manual', 'specialist'].map(mode => (
-                                <button key={mode} onClick={() => setFormData(p => ({ ...p, structureMode: mode }))} className={`p-5 rounded-2xl border text-left flex flex-col gap-2 ${formData.structureMode === mode ? 'bg-violet-500/10 border-violet-500/40' : 'bg-white/5 border-white/5 text-slate-500'}`}>
-                                    <div className="flex justify-between items-center">
-                                        <p className="text-xs font-black uppercase text-slate-200">{mode === 'manual' ? 'Definir seções' : 'Dica do Otávio'}</p>
-                                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${formData.structureMode === mode ? 'bg-violet-500 border-violet-500 text-white' : 'border-white/10'}`}>
-                                            {formData.structureMode === mode && <Icon name="check-circle-2" size={14} />}
-                                        </div>
-                                    </div>
-                                    <p className="text-[10px]">{mode === 'manual' ? 'Eu defino as seções.' : 'Sugestão estratégica do Otávio.'}</p>
-                                </button>
-                            ))}
-                        </div>
-                        {formData.structureMode === 'manual' && <textarea value={formData.manualStructure} onChange={e => setFormData(p => ({ ...p, manualStructure: e.target.value }))} className="input-premium h-32" placeholder="Ex: Início, Sobre, Planos..." />}
-                    </div>
-                    <div className="glass-card p-8 space-y-6">
-                        <h3 className="text-xs font-bold font-slate-400 uppercase flex items-center gap-2"><Icon name="upload" size={14} /> Arquivos</h3>
-                        <label className="block border-2 border-dashed border-white/5 hover:border-violet-500/40 rounded-3xl p-10 text-center cursor-pointer bg-slate-900/40">
-                            <Icon name="upload" size={32} className="mx-auto mb-4 text-slate-600" />
-                            <p className="text-sm font-bold">Enviar Fotos e Vídeos</p>
-                            <input type="file" multiple className="hidden" onChange={handleFileChange} />
-                        </label>
-                        <div className="space-y-3">
-                            {formData.files.map(f => (
-                                <div key={f.name} className="flex flex-col sm:flex-row gap-3 items-center p-4 bg-white/3 rounded-2xl border border-white/5">
-                                    <div className="flex items-center gap-3 flex-1 overflow-hidden"><Icon name="file-text" size={18} className="text-violet-500" /><span className="text-[11px] truncate">{f.name}</span></div>
-                                    <input type="text" placeholder="Seção?" value={f.section} onChange={e => updateFileSection(f.name, e.target.value)} className="input-premium sm:w-48 !py-2" />
-                                    <button onClick={() => removeFile(f.name)} className="p-2 text-slate-700 hover:text-rose-500"><Icon name="trash-2" size={16} /></button>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </motion.div>
-            );
-        };
-
-        const Step3 = ({ formData, setFormData }) => (
-            <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-6">
-                <div className="glass-card p-8 space-y-6">
-                    <span className="text-xs font-bold text-slate-400 block uppercase flex items-center gap-2"><Icon name="palette" size={14} /> Cores</span>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {['manual', 'specialist'].map(mode => (
-                             <button key={mode} onClick={() => setFormData(p => ({ ...p, colorMode: mode }))} className={`p-6 rounded-3xl border text-left flex flex-col gap-2 ${formData.colorMode === mode ? 'bg-violet-500/10 border-violet-500/40' : 'bg-white/5 border-white/5 text-slate-500'}`}>
-                                <div className="flex justify-between items-center">
-                                    <p className="text-xs font-black uppercase text-white">{mode === 'manual' ? 'Descrever Cores' : 'Confiar no Otávio'}</p>
-                                    <div className={`w-5 h-5 rounded-full border-2 ${formData.colorMode === mode ? 'bg-violet-500' : ''}`} />
-                                </div>
-                             </button>
-                        ))}
-                    </div>
-                    {formData.colorMode === 'manual' && <input type="text" value={formData.manualColors} onChange={e => setFormData(p => ({ ...p, manualColors: e.target.value }))} className="input-premium" placeholder="Ex: Azul e Dourado" />}
-                </div>
-            </motion.div>
-        );
-
-        const Step4 = ({ formData }) => {
-            const handleSend = () => {
-                let msg = `🚀 *NOVO BRIEFING*\n\n🏢 *EMPRESA:* ${formData.businessName}\n🎯 *OBJETIVOS:* ${formData.objectives.join(', ')}\n📱 *WHATSAPP:* ${formData.whatsapp}\n✨ *ESTRUTURA:* ${formData.structureMode === 'specialist' ? 'Otávio' : formData.manualStructure}\n🎨 *CORES:* ${formData.colorMode === 'specialist' ? 'Otávio' : formData.manualColors}`;
-                window.open(`https://wa.me/5521973629114?text=${encodeURIComponent(msg)}`, '_blank');
-            };
-            return (
-                <div className="glass-card p-10 text-center space-y-10">
-                    <Icon name="check-circle-2" size={48} className="mx-auto text-emerald-500" />
-                    <h3 className="text-3xl font-black uppercase">Fase Final</h3>
-                    <button onClick={handleSend} className="btn-primary w-full !bg-[#25D366] !py-6 !text-lg !rounded-full">Enviar via WhatsApp</button>
-                </div>
-            );
-        };
 
         function App() {
             const [step, setStep] = useState(1);
             const [showWarning, setShowWarning] = useState(false);
-            const [formData, setFormData] = useState({ businessName: '', niche: '', objectives: [], otherObjective: '', whatsapp: '', instagram: '', extraChannels: [], structureMode: null, manualStructure: '', files: [], colorMode: null, manualColors: '', typographyMode: null, manualTypography: '' });
             const [missingFields, setMissingFields] = useState([]);
+            const [formData, setFormData] = useState({
+                businessName: '', niche: '', objectives: [], leadsRedirect: '',
+                products: [], services: [], consultancies: [],
+                otherDetails: '', otherFileName: '', whatsapp: '', instagram: '', extraChannels: [],
+                structureMode: null, manualStructure: '', files: [],
+                colorMode: null, manualColors: '', typographyMode: null, manualTypography: '',
+                extraNotes: ''
+            });
 
-            const handleNext = () => {
-                const { isValid, missingFields: missing } = validateStep(step, formData);
-                if (!isValid) { setMissingFields(missing); setShowWarning(true); } else { setStep(s => Math.min(s+1, 4)); }
+            const validate = () => {
+                const missing = [];
+                if (step === 1) {
+                    if (!formData.businessName) missing.push('Nome da Empresa');
+                    if (!formData.niche) missing.push('Ramo de Atuação');
+                    if (formData.objectives.length === 0) missing.push('Objetivos do Site');
+                }
+                if (missing.length > 0) { setMissingFields(missing); setShowWarning(true); return false; }
+                return true;
             };
 
-            return (
-                <div className="h-screen flex flex-col bg-[#020617] text-slate-100 overflow-hidden relative">
-                    <div className="fixed inset-0 -z-10 bg-[radial-gradient(circle_at_top_right,_rgba(139,92,246,0.1),#020617)]" />
-                    <header className="h-20 border-b border-white/5 flex items-center justify-between px-8 bg-slate-950/30 backdrop-blur-2xl z-50">
-                        <div className="flex items-center gap-4"><div className="w-10 h-10 bg-violet-600 rounded-xl flex items-center justify-center text-white"><Icon name="briefcase" /></div><h1 className="text-lg font-black uppercase">Portal Briefing</h1></div>
-                        <div className="flex gap-1">{[1,2,3,4].map(s => <div key={s} className={`w-8 h-1 rounded-full ${s <= step ? 'bg-violet-500 shadow-lg' : 'bg-white/5'}`} />)}</div>
-                    </header>
-                    <main className="flex-1 overflow-y-auto custom-scrollbar p-6 md:p-12 max-w-4xl mx-auto w-full">
-                        <div className="mb-8 text-center sm:text-left">
-                            <span className="bg-violet-500/10 text-violet-400 text-[10px] font-black uppercase px-3 py-1 rounded-full border border-violet-500/20">Passo {step} de 4</span>
-                            <h2 className="text-4xl font-black uppercase mt-4">{step === 1 ? 'Negócio' : step === 2 ? 'Arquitetura' : step === 3 ? 'Design' : 'Revisão'}</h2>
-                        </div>
-                        <AnimatePresence mode="wait">
-                            {step === 1 && <Step1 formData={formData} setFormData={setFormData} />}
-                            {step === 2 && <Step2 formData={formData} setFormData={setFormData} />}
-                            {step === 3 && <Step3 formData={formData} setFormData={setFormData} />}
-                            {step === 4 && <Step4 formData={formData} />}
-                        </AnimatePresence>
-                    </main>
-                    <footer className="h-24 bg-slate-950/50 backdrop-blur-3xl border-t border-white/5 flex justify-between items-center px-8">
-                        <button onClick={() => setStep(s => Math.max(s-1, 1))} disabled={step === 1} className="btn-secondary disabled:opacity-0">Voltar</button>
-                        {step < 4 && <button onClick={handleNext} className="btn-primary">Próximo <Icon name="chevron-right" /></button>}
-                    </footer>
-                    <AnimatePresence>{showWarning && <WarningModal fields={missingFields} onClose={() => setShowWarning(false)} onConfirm={() => { setShowWarning(false); setStep(s => s+1); }} />}</AnimatePresence>
-                </div>
+            const handleNext = () => { if (validate()) setStep(s => s + 1); };
+
+            const compileMessage = () => {
+                let msg = `🚀 *NOVO BRIEFING - PORTAL DO OTÁVIO*\n\n`;
+                msg += `🏢 *EMPRESA:* ${formData.businessName}\n💼 *RAMO:* ${formData.niche}\n🎯 *OBJETIVOS:* ${formData.objectives.join(', ')}\n`;
+                
+                if (formData.products.length > 0) {
+                    msg += `\n📦 *PRODUTOS:*\n` + formData.products.map(p => `- ${p.name} (${p.price})`).join('\n') + '\n';
+                }
+                if (formData.services.length > 0) {
+                    msg += `\n🛠️ *SERVIÇOS:*\n` + formData.services.map(s => `- ${s.name} (${s.price})`).join('\n') + '\n';
+                }
+                if (formData.consultancies.length > 0) {
+                    msg += `\n🗓️ *CONSULTORIAS:*\n` + formData.consultancies.map(c => `- ${c.name} (${c.price})`).join('\n') + '\n';
+                }
+                
+                msg += `\n📱 *CONTATOS:*\n- WhatsApp: ${formData.whatsapp}\n- Instagram: ${formData.instagram}\n`;
+                if (formData.extraNotes) msg += `\n📝 *OBSERVAÇÕES EXTRAS:*\n${formData.extraNotes}\n`;
+                
+                return msg;
+            };
+
+            const handleSend = () => {
+                window.open(`https://wa.me/5521973629114?text=${encodeURIComponent(compileMessage())}`, '_blank');
+            };
+
+            return React.createElement('div', { className: "min-h-screen p-6 md:p-12 lg:p-20 flex flex-col items-center" },
+                React.createElement(AnimatePresence, null, 
+                    showWarning && React.createElement(WarningModal, { 
+                        fields: missingFields, 
+                        onClose: () => setShowWarning(false), 
+                        onConfirm: () => { setShowWarning(false); setStep(s => s + 1); } 
+                    })
+                ),
+                React.createElement('div', { className: "max-w-4xl w-full space-y-12 pb-20" },
+                    React.createElement('header', { className: "text-center md:text-left space-y-4" },
+                        React.createElement('div', { className: "inline-flex items-center gap-2 px-4 py-1 rounded-full bg-violet-600/10 border border-violet-600/20 text-[10px] font-black text-violet-500 uppercase tracking-widest" }, 
+                            React.createElement(SvgIcon, { name: "sparkles" }), `Passo ${step} de 4`
+                        ),
+                        React.createElement('h1', { className: "text-5xl md:text-7xl font-black tracking-tighter uppercase" }, 
+                            step === 1 ? "O Negócio" : step === 2 ? "Estrutura" : step === 3 ? "Design" : "Finalizar"
+                        )
+                    ),
+                    
+                    step === 1 && React.createElement(motion.div, { initial: { opacity: 0, x: 20 }, animate: { opacity: 1, x: 0 }, className: "glass-card p-10 space-y-12" },
+                        React.createElement('div', { className: "grid grid-cols-1 md:grid-cols-2 gap-8" },
+                            React.createElement('label', null, 
+                                React.createElement('span', { className: "text-xs font-bold text-slate-500 block mb-3 uppercase" }, "Nome Empresa"),
+                                React.createElement('input', { className: "input-premium", placeholder: "Ex: Fit Tech", value: formData.businessName, onChange: e => setFormData({...formData, businessName: e.target.value}) })
+                            ),
+                            React.createElement('label', null, 
+                                React.createElement('span', { className: "text-xs font-bold text-slate-500 block mb-3 uppercase" }, "Ramo de Atuação"),
+                                React.createElement('input', { className: "input-premium", placeholder: "Ex: Academia", value: formData.niche, onChange: e => setFormData({...formData, niche: e.target.value}) })
+                            )
+                        ),
+                        React.createElement('div', { className: "pt-8" },
+                            React.createElement('button', { onClick: handleNext, className: "btn-primary w-full" }, "Próximo Passo")
+                        )
+                    ),
+
+                    step === 4 && React.createElement(motion.div, { initial: { opacity: 0, scale: 0.95 }, animate: { opacity: 1, scale: 1 }, className: "glass-card p-10 space-y-10" },
+                        React.createElement('div', { className: "text-center space-y-4" },
+                            React.createElement('div', { className: "w-20 h-20 bg-[#25D366]/10 text-[#25D366] rounded-full flex items-center justify-center mx-auto border border-[#25D366]/20" },
+                                React.createElement(SvgIcon, { name: "check", className: "scale-150" })
+                            ),
+                            React.createElement('h2', { className: "text-3xl font-black uppercase tracking-tighter" }, "Resumo & Envio")
+                        ),
+                        React.createElement('div', { className: "space-y-4" },
+                            React.createElement('h4', { className: "text-[10px] font-black text-slate-500 uppercase tracking-widest pl-2" }, "Observações Extras"),
+                            React.createElement('textarea', { 
+                                className: "input-premium h-40 resize-none pt-4", 
+                                placeholder: "Algo mais que devemos saber?",
+                                value: formData.extraNotes,
+                                onChange: e => setFormData({...formData, extraNotes: e.target.value})
+                            })
+                        ),
+                        React.createElement('button', { 
+                            onClick: handleSend, 
+                            className: "btn-primary w-full !bg-[#25D366] !py-8 !text-xl shadow-[#25D366]/20" 
+                        }, 
+                            React.createElement(SvgIcon, { name: "whatsapp" }), "Enviar Briefing para Otávio"
+                        )
+                    )
+                )
             );
         }
 
         const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
+        root.render(React.createElement(App));
     </script>
 </body>
 </html>
