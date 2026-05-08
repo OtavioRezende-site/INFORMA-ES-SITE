@@ -1114,24 +1114,25 @@ export default function App() {
   };
 
   return (
-    <div className="flex flex-col h-[100dvh] w-full bg-[#020617] text-slate-100 font-sans overflow-hidden">
+    <div className="flex flex-col h-screen bg-[#020617] text-slate-100 font-sans overflow-hidden">
       {/* Dynamic Background */}
       <div className="fixed inset-0 -z-10 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-violet-950/20 via-slate-950 to-slate-950" />
       <div className="fixed top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/dark-matter.png')] opacity-[0.03] -z-10 pointer-events-none" />
 
       {/* Header */}
-      <header className="h-20 sm:h-24 border-b border-white/5 flex items-center justify-between px-6 sm:px-12 md:px-20 bg-slate-950/40 backdrop-blur-3xl shrink-0 z-50">
-        <div className="flex items-center gap-4 sm:gap-6">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-accent rounded-xl flex items-center justify-center text-white accent-glow shadow-xl shadow-accent/20">
-            <Briefcase size={24} />
+      <header className="h-16 sm:h-20 border-b border-white/5 flex items-center justify-between px-4 sm:px-8 bg-slate-950/30 backdrop-blur-2xl shrink-0 z-50">
+        <div className="flex items-center gap-3 sm:gap-4">
+          <div className="w-8 h-8 sm:w-10 sm:h-10 bg-accent rounded-lg flex items-center justify-center text-white accent-glow">
+            <Briefcase size={16} className="sm:hidden" />
+            <Briefcase size={20} className="hidden sm:block" />
           </div>
           <div>
-            <h1 className="text-base sm:text-xl font-black tracking-tight uppercase leading-none">Portal <span className="text-accent underline decoration-accent/20 underline-offset-4">Briefing</span></h1>
-            <p className="text-[10px] sm:text-xs text-slate-500 uppercase tracking-widest mt-1">by Otávio</p>
+            <h1 className="text-sm sm:text-lg font-black tracking-tight uppercase leading-none">Portal <span className="text-accent underline decoration-accent/20 underline-offset-2 text-xs sm:text-lg">Briefing</span></h1>
+            <p className="text-[8px] sm:text-[10px] text-slate-600 uppercase tracking-widest mt-0.5 sm:mt-1">by Otávio</p>
           </div>
         </div>
         
-        <div className="hidden sm:flex gap-3 sm:gap-4 items-center transform scale-110 md:scale-125">
+        <div className="flex gap-1.5 sm:gap-2 items-center scale-90 sm:scale-110 md:scale-125 lg:scale-150 transform transition-transform">
           {[1, 2, 3, 4].map(s => (
             <div 
               key={s} 
@@ -1144,19 +1145,19 @@ export default function App() {
       </header>
 
       {/* Content */}
-      <main className="flex-1 overflow-y-auto custom-scrollbar px-6 sm:px-12 md:px-24 py-10 md:py-16">
-        <div className="max-w-[1400px] mx-auto pb-20">
-          <div className="mb-12 sm:mb-20 text-center lg:text-left space-y-4 sm:space-y-6">
-             <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] text-accent">
-                <Sparkles size={14} /> Passo {step} de 4
+      <main className="flex-1 overflow-y-auto custom-scrollbar p-4 sm:p-8 md:p-12 lg:p-20">
+        <div className="max-w-[1200px] mx-auto pb-10">
+          <div className="mb-10 sm:mb-16 text-center lg:text-left space-y-3 sm:space-y-4">
+             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-[8px] sm:text-[10px] font-black uppercase tracking-widest text-accent">
+                <Sparkles size={10} /> Passo {step} de 4
               </div>
-              <h2 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white tracking-tighter uppercase leading-[0.85]">
+              <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white tracking-tighter uppercase leading-[0.9]">
                 {step === 1 && "Foco no Negócio"}
                 {step === 2 && "Estrutura & Mídia"}
                 {step === 3 && "Visual & Tom"}
                 {step === 4 && "Confirmação"}
               </h2>
-              <p className="text-slate-500 text-base sm:text-lg md:text-xl lg:text-2xl max-w-4xl leading-relaxed">
+              <p className="text-slate-500 text-sm sm:text-base md:text-lg lg:text-xl max-w-3xl">
                 {step === 1 && "Defina a essência e o funil de ofertas que guiarão o projeto."}
                 {step === 2 && "Como as seções se organizam e quais arquivos darão vida à página."}
                 {step === 3 && "Cores e tipografia que comunicam autoridade e atraem conversão."}
@@ -1174,22 +1175,22 @@ export default function App() {
       </main>
 
       {/* Actions */}
-      <footer className="h-24 sm:h-28 bg-[#020617]/95 backdrop-blur-3xl border-t border-white/10 flex items-center justify-between px-10 sm:px-20 md:px-32 shrink-0 z-50">
+      <footer className="h-20 sm:h-24 bg-slate-950/50 backdrop-blur-3xl border-t border-white/5 flex items-center justify-between px-4 sm:px-8 shrink-0">
         <button 
           onClick={prevStep}
           disabled={step === 1}
-          className="btn-secondary !py-4 !px-8 sm:!py-5 sm:!px-10 flex items-center gap-3 disabled:opacity-0 transition-opacity font-bold text-sm uppercase tracking-widest"
+          className="btn-secondary !py-2.5 !px-4 sm:!py-3 sm:!px-6 flex items-center gap-2 disabled:opacity-0 pointer-events-auto text-xs sm:text-sm"
         >
-          <ChevronLeft size={20} /> Anterior
+          <ChevronLeft size={16} className="sm:w-5 sm:h-5" /> Anterior
         </button>
 
         <div className="flex items-center gap-4">
            {step < 4 && (
             <button 
               onClick={handleNext}
-              className="btn-primary !py-4 !px-10 sm:!py-5 sm:!px-16 group text-sm sm:text-lg rounded-2xl shadow-xl shadow-accent/20"
+              className="btn-primary !py-2.5 !px-6 sm:!py-3 sm:!px-10 group text-xs sm:text-sm"
             >
-              Próximo <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
+              Próximo <ChevronRight size={16} className="sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
             </button>
            )}
         </div>
